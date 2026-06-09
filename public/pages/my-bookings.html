@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Bookings — RwandaGuide</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .tab-bar { display:flex; gap:0; border-bottom:1px solid var(--border); margin-bottom:1.5rem; }
+    .tab { padding:.7rem 1.3rem; font-size:14px; font-weight:500; color:var(--muted);
+      cursor:pointer; border-bottom:2.5px solid transparent; margin-bottom:-1px; transition:all .2s; }
+    .tab.active { color:var(--green); border-color:var(--green); }
+    .booking-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+      padding:1.2rem; margin-bottom:1rem; display:flex; gap:1.2rem; align-items:flex-start; }
+    .booking-card .avatar { width:70px; height:70px; border-radius:10px;
+      background:linear-gradient(135deg,#d4e8d8,#c0d8c8); display:flex; align-items:center;
+      justify-content:center; font-size:2rem; flex-shrink:0; }
+    .booking-card .info { flex:1; }
+    .booking-card .actions { display:flex; flex-direction:column; gap:7px; align-items:flex-end; }
+    .booking-ref-sm { font-size:12px; color:var(--muted); font-family:monospace; }
+    .empty-state { text-align:center; padding:4rem 2rem; color:var(--muted); }
+    .empty-state .icon { font-size:3rem; margin-bottom:1rem; }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="../index.html">🌿 Rwanda<span>Guide</span></a>
+  <div class="nav-links">
+    <a href="search.html">Explore Guides</a>
+    <a href="my-bookings.html" class="active">My Bookings</a>
+    <a href="#" style="color:var(--muted);">👤 My Profile</a>
+    <button class="btn btn-ghost btn-sm" id="logoutBtn">Log Out</button>
+  </div>
+</nav>
+
+<div class="container" style="padding-top:2rem;padding-bottom:3rem;">
+  <div class="page-header">
+    <h1>My Bookings</h1>
+    <p>Manage your upcoming and past experiences</p>
+  </div>
+
+  <div class="tab-bar">
+    <div class="tab active" onclick="switchTab('upcoming',this)">Upcoming (2)</div>
+    <div class="tab" onclick="switchTab('past',this)">Past (3)</div>
+    <div class="tab" onclick="switchTab('cancelled',this)">Cancelled (1)</div>
+  </div>
+
+  <!-- UPCOMING -->
+  <div id="tab-upcoming">
+    <div class="booking-card">
+      <div class="avatar">🧑🏾</div>
+      <div class="info">
+        <div style="font-family:'Playfair Display',serif;font-weight:600;font-size:16px;">Gorilla Trekking</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px;">with Jean-Pierre Habimana · 📍 Volcanoes NP</div>
+        <div style="font-size:13px;margin-top:5px;">📅 <strong>15 May 2025</strong>, 08:00 – 16:00 &nbsp;·&nbsp; 👥 2 people</div>
+        <div style="margin-top:6px;display:flex;align-items:center;gap:8px;">
+          <span class="status status-confirmed">CONFIRMED</span>
+          <span class="booking-ref-sm">RG-2025-00482</span>
+        </div>
+      </div>
+      <div class="actions">
+        <span style="font-weight:600;color:var(--green);">$297.00</span>
+        <a href="booking.html" class="btn btn-ghost btn-sm">View Details</a>
+        <button class="btn btn-sm" style="border:1.5px solid var(--danger);color:var(--danger);background:transparent;border-radius:var(--radius);cursor:pointer;">Cancel</button>
+      </div>
+    </div>
+
+    <div class="booking-card">
+      <div class="avatar">👩🏾</div>
+      <div class="info">
+        <div style="font-family:'Playfair Display',serif;font-weight:600;font-size:16px;">Kigali City Tour</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px;">with Claudine Uwase · 📍 Kigali</div>
+        <div style="font-size:13px;margin-top:5px;">📅 <strong>22 May 2025</strong>, 09:00 – 13:00 &nbsp;·&nbsp; 👥 1 person</div>
+        <div style="margin-top:6px;display:flex;align-items:center;gap:8px;">
+          <span class="status status-pending">PENDING</span>
+          <span class="booking-ref-sm">RG-2025-00491</span>
+        </div>
+      </div>
+      <div class="actions">
+        <span style="font-weight:600;color:var(--green);">$140.00</span>
+        <a href="booking.html" class="btn btn-ghost btn-sm">View Details</a>
+        <button class="btn btn-sm" style="border:1.5px solid var(--danger);color:var(--danger);background:transparent;border-radius:var(--radius);cursor:pointer;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAST -->
+  <div id="tab-past" style="display:none;">
+    <div class="booking-card">
+      <div class="avatar">🧑🏾‍🦱</div>
+      <div class="info">
+        <div style="font-family:'Playfair Display',serif;font-weight:600;font-size:16px;">Nyungwe Canopy Walk</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px;">with Emmanuel Nkurunziza · 📍 Nyungwe Forest</div>
+        <div style="font-size:13px;margin-top:5px;">📅 <strong>10 Apr 2025</strong> &nbsp;·&nbsp; 👥 3 people</div>
+        <div style="margin-top:6px;display:flex;align-items:center;gap:8px;">
+          <span class="status status-completed">COMPLETED</span>
+          <span class="booking-ref-sm">RG-2025-00387</span>
+        </div>
+      </div>
+      <div class="actions">
+        <span style="font-weight:600;color:var(--green);">$360.00</span>
+        <a href="review.html" class="btn btn-gold btn-sm">Leave Review</a>
+        <a href="booking.html" class="btn btn-ghost btn-sm">View Details</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- CANCELLED -->
+  <div id="tab-cancelled" style="display:none;">
+    <div class="booking-card" style="opacity:.7;">
+      <div class="avatar" style="opacity:.6;">🧔🏾</div>
+      <div class="info">
+        <div style="font-family:'Playfair Display',serif;font-weight:600;font-size:16px;">Akagera Safari</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px;">with Patrick Nsabimana · 📍 Akagera NP</div>
+        <div style="font-size:13px;margin-top:5px;">📅 <strong>1 Apr 2025</strong> &nbsp;·&nbsp; 👥 2 people</div>
+        <div style="margin-top:6px;display:flex;align-items:center;gap:8px;">
+          <span class="status status-cancelled">CANCELLED</span>
+          <span class="booking-ref-sm">RG-2025-00341</span>
+        </div>
+      </div>
+      <div class="actions">
+        <span style="font-size:13px;color:var(--muted);">Refunded</span>
+        <a href="search.html" class="btn btn-ghost btn-sm">Rebook</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer><div class="container"><div class="footer-inner">
+  <div class="brand">🌿 RwandaGuide</div>
+  <div>© 2025 Rwanda Tourist Experience Platform</div>
+</div></div></footer>
+
+<script>
+function switchTab(name, el) {
+  ['upcoming','past','cancelled'].forEach(t => {
+    document.getElementById('tab-'+t).style.display = t===name ? 'block':'none';
+  });
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+document.getElementById('logoutBtn').addEventListener('click', async () => {
+  try { await fetch('/api/v1/auth/logout', {method:'POST'}); } catch(e){}
+  localStorage.removeItem('accessToken');
+  location.href = '../index.html';
+});
+</script>
+</body>
+</html>

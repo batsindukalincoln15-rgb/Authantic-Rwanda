@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up — RwandaGuide</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    body { display: flex; flex-direction: column; min-height: 100vh; }
+    .auth-wrap { flex:1; display:flex; align-items:center; justify-content:center; padding:2rem 1rem; }
+    .auth-card { background:var(--surface); border:1px solid var(--border); border-radius:14px;
+      box-shadow:var(--shadow); width:100%; max-width:460px; padding:2.5rem; }
+    .auth-logo { text-align:center; margin-bottom:1.2rem; }
+    .auth-logo a { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--green); text-decoration:none; }
+    .auth-logo a span { color:var(--gold); }
+    .auth-title { font-family:'Playfair Display',serif; font-size:1.5rem; text-align:center; margin-bottom:.3rem; }
+    .auth-sub { text-align:center; color:var(--muted); font-size:14px; margin-bottom:1.5rem; }
+    .role-toggle { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:1.4rem; }
+    .role-btn { padding:10px; border:1.5px solid var(--border); border-radius:var(--radius); background:var(--surface);
+      cursor:pointer; font-size:14px; font-weight:500; text-align:center; transition:all .2s; color:var(--muted); }
+    .role-btn.selected { border-color:var(--green); background:#e3f2ea; color:var(--green); }
+    .auth-footer { text-align:center; margin-top:1.3rem; font-size:14px; color:var(--muted); }
+    .auth-footer a { color:var(--green); text-decoration:none; font-weight:500; }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="../index.html">🌿 Rwanda<span>Guide</span></a>
+  <div class="nav-links">
+    <a href="search.html">Explore Guides</a>
+    <a href="login.html" class="btn btn-ghost btn-sm">Log In</a>
+  </div>
+</nav>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-logo"><a href="../index.html">🌿 Rwanda<span>Guide</span></a></div>
+    <div class="auth-title">Create your account</div>
+    <div class="auth-sub">Join Rwanda's premier guide booking platform</div>
+
+    <div class="alert alert-error" id="errorMsg" style="display:none;"></div>
+    <div class="alert alert-success" id="successMsg" style="display:none;"></div>
+
+    <div class="role-toggle">
+      <div class="role-btn selected" id="roleT" onclick="selectRole('tourist')">🧳 I'm a Tourist</div>
+      <div class="role-btn" id="roleG" onclick="selectRole('guide')">🗺️ I'm a Guide</div>
+    </div>
+    <input type="hidden" id="role" value="tourist" />
+
+    <form id="registerForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" class="form-control" id="firstName" placeholder="Alice" required />
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" class="form-control" id="lastName" placeholder="Mutoni" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email address</label>
+        <input type="email" class="form-control" id="email" placeholder="you@example.com" required />
+      </div>
+      <div class="form-group">
+        <label>Password <span style="color:var(--muted);font-size:12px;">(min 8 characters)</span></label>
+        <input type="password" class="form-control" id="password" placeholder="••••••••" minlength="8" required />
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" class="form-control" id="passwordConfirm" placeholder="••••••••" required />
+      </div>
+      <div class="form-group" style="display:flex;align-items:flex-start;gap:8px;margin-top:.5rem;">
+        <input type="checkbox" id="terms" style="margin-top:3px;" required />
+        <label for="terms" style="font-size:13px;color:var(--muted);">
+          I agree to the <a href="#" style="color:var(--green);">Terms of Service</a> and <a href="#" style="color:var(--green);">Privacy Policy</a>
+        </label>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;margin-top:.5rem;">Create Account</button>
+    </form>
+
+    <div class="auth-footer">Already have an account? <a href="login.html">Log in</a></div>
+  </div>
+</div>
+
+<script>
+  function selectRole(role) {
+    document.getElementById('role').value = role;
+    document.getElementById('roleT').classList.toggle('selected', role==='tourist');
+    document.getElementById('roleG').classList.toggle('selected', role==='guide');
+  }
+  const params = new URLSearchParams(location.search);
+  if (params.get('role') === 'guide') selectRole('guide');
+
+  document.getElementById('registerForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type=submit]');
+    const pw = document.getElementById('password').value;
+    const pc = document.getElementById('passwordConfirm').value;
+    if (pw !== pc) {
+      const el = document.getElementById('errorMsg');
+      el.textContent = 'Passwords do not match.'; el.style.display = 'block'; return;
+    }
+    btn.textContent = 'Creating account…'; btn.disabled = true;
+    const body = {
+      full_name: document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value,
+      email: document.getElementById('email').value,
+      password: pw,
+      role: document.getElementById('role').value
+    };
+    try {
+      const res = await fetch('/api/v1/auth/register', {
+        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Registration failed');
+      document.getElementById('errorMsg').style.display = 'none';
+      const sm = document.getElementById('successMsg');
+      sm.textContent = 'Account created! Check your email to verify your address.'; sm.style.display = 'block';
+      btn.textContent = 'Account Created ✓';
+    } catch(err) {
+      const el = document.getElementById('errorMsg');
+      el.textContent = err.message; el.style.display = 'block';
+      btn.textContent = 'Create Account'; btn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

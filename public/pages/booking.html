@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book a Guide — RwandaGuide</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .booking-layout { display:grid; grid-template-columns:1fr 340px; gap:2rem; align-items:start; padding:2.5rem 0; }
+    .steps { display:flex; gap:0; margin-bottom:2rem; }
+    .step { flex:1; text-align:center; padding:.7rem; font-size:13px; font-weight:500;
+      border-bottom:3px solid var(--border); color:var(--muted); }
+    .step.active { border-color:var(--green); color:var(--green); }
+    .step.done { border-color:#a8d8b8; color:var(--green); }
+    .panel { display:none; }
+    .panel.active { display:block; }
+    .price-row { display:flex; justify-content:space-between; font-size:14px; padding:.4rem 0; }
+    .price-row.total { font-weight:600; font-size:16px; border-top:1px solid var(--border); margin-top:.5rem; padding-top:.8rem; }
+    .payment-method { border:1.5px solid var(--border); border-radius:var(--radius); padding:1rem;
+      cursor:pointer; margin-bottom:.8rem; display:flex; align-items:center; gap:.8rem; transition:border-color .2s; }
+    .payment-method:hover, .payment-method.selected { border-color:var(--green); background:#f5fbf7; }
+    .payment-method input[type=radio] { accent-color:var(--green); }
+    .payment-icon { font-size:1.6rem; }
+    .payment-label { font-weight:500; font-size:14px; }
+    .payment-desc { font-size:12px; color:var(--muted); }
+    .momo-field { margin-top:1rem; display:none; }
+    .momo-field.show { display:block; }
+    .confirmation-box { text-align:center; padding:2rem; }
+    .confirmation-box .check { font-size:4rem; margin-bottom:1rem; }
+    .confirmation-box h2 { font-family:'Playfair Display',serif; font-size:1.5rem; margin-bottom:.5rem; }
+    .booking-ref { background:#e3f2ea; border-radius:var(--radius); padding:.8rem 1.2rem;
+      font-family:monospace; font-size:1.1rem; color:var(--green); display:inline-block; margin:.8rem 0; }
+    .summary-card { position:sticky; top:80px; }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="../index.html">🌿 Rwanda<span>Guide</span></a>
+  <div class="nav-links">
+    <a href="guide-profile.html">← Guide Profile</a>
+    <a href="my-bookings.html">My Bookings</a>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="booking-layout">
+
+    <!-- LEFT — Steps -->
+    <div>
+      <div class="page-header" style="padding-top:1.5rem;">
+        <h1>Book Your Experience</h1>
+        <p>With Jean-Pierre Habimana · Volcanoes NP</p>
+      </div>
+
+      <div class="steps">
+        <div class="step active" id="step1Label">1. Details</div>
+        <div class="step" id="step2Label">2. Payment</div>
+        <div class="step" id="step3Label">3. Confirmation</div>
+      </div>
+
+      <!-- Step 1: Details -->
+      <div class="panel active card card-body" id="panel1">
+        <div class="section-heading" style="font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:1rem;">Experience Details</div>
+
+        <div class="form-group">
+          <label>Select Experience</label>
+          <select class="form-control" id="experience">
+            <option value="gorilla">Gorilla Trekking — Full Day ($270)</option>
+            <option value="monkey">Golden Monkey Trek — Half Day ($135)</option>
+            <option value="volcano">Volcano Hike — Full Day ($250)</option>
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Start Date & Time</label>
+            <input type="datetime-local" class="form-control" id="startDate" />
+          </div>
+          <div class="form-group">
+            <label>End Date & Time</label>
+            <input type="datetime-local" class="form-control" id="endDate" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Group Size</label>
+          <input type="number" class="form-control" id="groupSize" min="1" max="10" value="2" />
+        </div>
+
+        <div class="form-group">
+          <label>Special Requests (optional)</label>
+          <textarea class="form-control" id="notes" rows="3" placeholder="Dietary needs, accessibility, preferred pace…"></textarea>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;margin-top:.5rem;">
+          <button class="btn btn-primary" onclick="goStep(2)">Continue to Payment →</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Payment -->
+      <div class="panel card card-body" id="panel2">
+        <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;margin-bottom:1rem;">Payment Method</div>
+
+        <div class="payment-method selected" onclick="selectPayment('momo',this)">
+          <input type="radio" name="payment" checked />
+          <div class="payment-icon">📱</div>
+          <div><div class="payment-label">MTN Mobile Money</div><div class="payment-desc">Instant USSD push to your phone</div></div>
+        </div>
+        <div class="payment-method" onclick="selectPayment('card',this)">
+          <input type="radio" name="payment" />
+          <div class="payment-icon">💳</div>
+          <div><div class="payment-label">Credit / Debit Card</div><div class="payment-desc">Visa, Mastercard accepted</div></div>
+        </div>
+
+        <div class="momo-field show" id="momoField">
+          <div class="form-group">
+            <label>MTN MoMo Phone Number</label>
+            <input type="tel" class="form-control" placeholder="078 XXX XXXX" />
+          </div>
+          <div class="alert alert-success" style="font-size:13px;">
+            💡 You'll receive a USSD push on your phone to approve the payment of <strong id="payTotal">$270.00</strong>.
+          </div>
+        </div>
+
+        <div id="cardField" style="display:none;">
+          <div class="form-group"><label>Card Number</label><input type="text" class="form-control" placeholder="1234 5678 9012 3456" /></div>
+          <div class="form-row">
+            <div class="form-group"><label>Expiry</label><input type="text" class="form-control" placeholder="MM/YY" /></div>
+            <div class="form-group"><label>CVV</label><input type="text" class="form-control" placeholder="123" /></div>
+          </div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;margin-top:1rem;">
+          <button class="btn btn-ghost" onclick="goStep(1)">← Back</button>
+          <button class="btn btn-primary" onclick="goStep(3)">Pay & Confirm →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Confirmation -->
+      <div class="panel card card-body" id="panel3">
+        <div class="confirmation-box">
+          <div class="check">✅</div>
+          <h2>Booking Confirmed!</h2>
+          <p style="color:var(--muted);">Your experience with Jean-Pierre has been booked successfully.</p>
+          <div class="booking-ref">RG-2025-00482</div>
+          <div style="margin:1rem 0;font-size:14px;color:var(--muted);">
+            📧 Confirmation sent to your email<br/>
+            📱 Guide contact details sent via SMS
+          </div>
+          <div style="display:flex;gap:10px;justify-content:center;margin-top:1rem;">
+            <a href="my-bookings.html" class="btn btn-primary">View My Bookings</a>
+            <a href="search.html" class="btn btn-ghost">Book Another Guide</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT — Summary -->
+    <div class="summary-card">
+      <div class="card card-body">
+        <div style="font-weight:600;margin-bottom:1rem;">Booking Summary</div>
+        <div style="display:flex;gap:.8rem;align-items:center;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--border);">
+          <div style="width:48px;height:48px;border-radius:8px;background:linear-gradient(135deg,#d4e8d8,#c0d8c8);display:flex;align-items:center;justify-content:center;font-size:1.4rem;">🧑🏾</div>
+          <div><div style="font-weight:500;">Jean-Pierre Habimana</div><div style="font-size:13px;color:var(--muted);">📍 Volcanoes NP · ★ 5.0</div></div>
+        </div>
+        <div class="price-row"><span style="color:var(--muted);">Experience</span><span>Gorilla Trekking</span></div>
+        <div class="price-row"><span style="color:var(--muted);">Date</span><span id="sumDate">—</span></div>
+        <div class="price-row"><span style="color:var(--muted);">Group size</span><span id="sumGroup">2 people</span></div>
+        <hr class="divider" />
+        <div class="price-row"><span style="color:var(--muted);">Base price</span><span>$270.00</span></div>
+        <div class="price-row"><span style="color:var(--muted);">Platform fee (10%)</span><span>$27.00</span></div>
+        <div class="price-row total"><span>Total</span><span style="color:var(--green);">$297.00</span></div>
+        <div style="margin-top:1rem;font-size:12px;color:var(--muted);line-height:1.5;">
+          🔒 Funds held in escrow until your experience is completed.<br/>
+          Free cancellation up to 48h before start.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer><div class="container"><div class="footer-inner">
+  <div class="brand">🌿 RwandaGuide</div>
+  <div>© 2025 Rwanda Tourist Experience Platform</div>
+</div></div></footer>
+
+<script>
+function goStep(n) {
+  [1,2,3].forEach(i => {
+    document.getElementById('panel'+i).classList.toggle('active', i===n);
+    const lbl = document.getElementById('step'+i+'Label');
+    lbl.classList.remove('active','done');
+    if(i===n) lbl.classList.add('active');
+    if(i<n) lbl.classList.add('done');
+  });
+}
+function selectPayment(type, el) {
+  document.querySelectorAll('.payment-method').forEach(m => { m.classList.remove('selected'); m.querySelector('input').checked=false; });
+  el.classList.add('selected'); el.querySelector('input').checked=true;
+  document.getElementById('momoField').classList.toggle('show', type==='momo');
+  document.getElementById('cardField').style.display = type==='card' ? 'block':'none';
+}
+document.getElementById('groupSize').addEventListener('input', e => {
+  document.getElementById('sumGroup').textContent = e.target.value + ' people';
+});
+document.getElementById('startDate').addEventListener('change', e => {
+  document.getElementById('sumDate').textContent = new Date(e.target.value).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}) || '—';
+});
+</script>
+</body>
+</html>

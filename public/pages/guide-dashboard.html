@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guide Dashboard — RwandaGuide</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .dash-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:2rem; }
+    .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+      padding:1.2rem; }
+    .stat-card .stat-icon { font-size:1.8rem; margin-bottom:.5rem; }
+    .stat-card .stat-val { font-family:'Playfair Display',serif; font-size:1.6rem; font-weight:700; }
+    .stat-card .stat-lbl { font-size:13px; color:var(--muted); margin-top:2px; }
+    .stat-card .stat-change { font-size:12px; margin-top:.4rem; }
+    .stat-card .stat-change.up { color:var(--green); } .stat-card .stat-change.down { color:var(--danger); }
+    .section-heading { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:600; margin-bottom:1rem; }
+    .request-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+      padding:1.1rem; margin-bottom:.8rem; display:flex; gap:1rem; align-items:center; }
+    .request-card .tourist-ava { width:44px; height:44px; border-radius:50%; background:#e8f4ec; display:flex; align-items:center; justify-content:center; font-size:1.3rem; flex-shrink:0; }
+    .request-card .info { flex:1; }
+    .request-actions { display:flex; gap:7px; }
+    .earnings-row { display:flex; justify-content:space-between; padding:.6rem 0; border-bottom:1px solid var(--border); font-size:14px; }
+    .earnings-row:last-child { border-bottom:none; }
+    .nav-links .active { color:var(--green) !important; }
+    @media(max-width:768px) { .dash-grid { grid-template-columns:repeat(2,1fr); } }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="../index.html">🌿 Rwanda<span>Guide</span></a>
+  <div class="nav-links">
+    <a href="guide-dashboard.html" class="active">Dashboard</a>
+    <a href="#" class="hide-mobile">My Profile</a>
+    <a href="#" class="hide-mobile">Availability</a>
+    <a href="#" style="color:var(--muted);">🧑🏾 Jean-Pierre</a>
+    <button class="btn btn-ghost btn-sm" onclick="localStorage.removeItem('accessToken');location.href='../index.html'">Log Out</button>
+  </div>
+</nav>
+
+<div class="container" style="padding-top:2rem;padding-bottom:3rem;">
+
+  <div class="page-header">
+    <h1>Guide Dashboard</h1>
+    <p>Welcome back, Jean-Pierre 👋</p>
+  </div>
+
+  <!-- STATS -->
+  <div class="dash-grid">
+    <div class="stat-card">
+      <div class="stat-icon">💰</div>
+      <div class="stat-val">$1,840</div>
+      <div class="stat-lbl">Earnings this month</div>
+      <div class="stat-change up">↑ 18% vs last month</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📅</div>
+      <div class="stat-val">6</div>
+      <div class="stat-lbl">Upcoming bookings</div>
+      <div class="stat-change up">↑ 2 new this week</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">⭐</div>
+      <div class="stat-val">5.0</div>
+      <div class="stat-lbl">Average rating</div>
+      <div class="stat-change up">48 reviews</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🔔</div>
+      <div class="stat-val">2</div>
+      <div class="stat-lbl">Pending requests</div>
+      <div class="stat-change" style="color:var(--gold);">Action needed</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+
+    <!-- BOOKING REQUESTS -->
+    <div>
+      <div class="section-heading">Pending Requests</div>
+
+      <div class="request-card">
+        <div class="tourist-ava">👤</div>
+        <div class="info">
+          <div style="font-weight:500;">Gorilla Trekking</div>
+          <div style="font-size:13px;color:var(--muted);">Sarah K. · 📅 22 May 2025 · 👥 2 people</div>
+          <div style="font-size:13px;color:var(--green);margin-top:2px;">$297.00</div>
+        </div>
+        <div class="request-actions">
+          <button class="btn btn-primary btn-sm" onclick="handleRequest(this,'accept')">Accept</button>
+          <button class="btn btn-sm" style="border:1.5px solid var(--danger);color:var(--danger);background:transparent;border-radius:var(--radius);cursor:pointer;" onclick="handleRequest(this,'reject')">Decline</button>
+        </div>
+      </div>
+
+      <div class="request-card">
+        <div class="tourist-ava">👤</div>
+        <div class="info">
+          <div style="font-weight:500;">Volcano Hike</div>
+          <div style="font-size:13px;color:var(--muted);">Marcus T. · 📅 28 May 2025 · 👥 1 person</div>
+          <div style="font-size:13px;color:var(--green);margin-top:2px;">$250.00</div>
+        </div>
+        <div class="request-actions">
+          <button class="btn btn-primary btn-sm" onclick="handleRequest(this,'accept')">Accept</button>
+          <button class="btn btn-sm" style="border:1.5px solid var(--danger);color:var(--danger);background:transparent;border-radius:var(--radius);cursor:pointer;" onclick="handleRequest(this,'reject')">Decline</button>
+        </div>
+      </div>
+
+      <div style="margin-top:1.5rem;">
+        <div class="section-heading">Upcoming Confirmed</div>
+        <div class="request-card">
+          <div class="tourist-ava">👤</div>
+          <div class="info">
+            <div style="font-weight:500;">Gorilla Trekking</div>
+            <div style="font-size:13px;color:var(--muted);">Alice M. · 📅 15 May 2025 · 👥 2 people</div>
+          </div>
+          <span class="status status-confirmed">CONFIRMED</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- EARNINGS -->
+    <div>
+      <div class="section-heading">Earnings Breakdown — May 2025</div>
+      <div class="card card-body">
+        <div class="earnings-row">
+          <span>Gorilla Trekking · 3 May</span>
+          <span style="color:var(--green);">+$243.00</span>
+        </div>
+        <div class="earnings-row">
+          <span>Volcano Hike · 7 May</span>
+          <span style="color:var(--green);">+$225.00</span>
+        </div>
+        <div class="earnings-row">
+          <span>Gorilla Trekking · 10 May</span>
+          <span style="color:var(--muted);">Pending release</span>
+        </div>
+        <div class="earnings-row">
+          <span>Platform fee (10%)</span>
+          <span style="color:var(--danger);">−$46.80</span>
+        </div>
+        <hr class="divider" />
+        <div class="earnings-row" style="font-weight:600;">
+          <span>Released to wallet</span>
+          <span style="color:var(--green);">$421.20</span>
+        </div>
+        <div class="earnings-row" style="color:var(--muted);">
+          <span>Pending (in escrow)</span>
+          <span>$243.00</span>
+        </div>
+        <button class="btn btn-primary" style="width:100%;margin-top:1rem;">Request Payout</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer><div class="container"><div class="footer-inner">
+  <div class="brand">🌿 RwandaGuide</div>
+  <div>© 2025 Rwanda Tourist Experience Platform</div>
+</div></div></footer>
+
+<script>
+async function handleRequest(btn, action) {
+  const card = btn.closest('.request-card');
+  const bookingId = 'placeholder-id';
+  btn.disabled = true; btn.textContent = action==='accept'?'Accepting…':'Declining…';
+  try {
+    const token = localStorage.getItem('accessToken');
+    await fetch(`/api/v1/bookings/${bookingId}/${action==='accept'?'confirm':'reject'}`, {
+      method:'PUT', headers:{'Authorization':'Bearer '+token}
+    });
+  } catch(e){}
+  card.style.opacity='.5';
+  card.querySelector('.request-actions').innerHTML = `<span class="status ${action==='accept'?'status-confirmed':'status-rejected'}">${action==='accept'?'ACCEPTED':'DECLINED'}</span>`;
+}
+</script>
+</body>
+</html>

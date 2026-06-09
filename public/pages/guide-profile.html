@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guide Profile — RwandaGuide</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .profile-hero { background:var(--surface); border-bottom:1px solid var(--border); padding:2.5rem 0; }
+    .profile-top { display:flex; gap:2rem; align-items:flex-start; }
+    .profile-avatar { width:110px; height:110px; border-radius:14px;
+      background:linear-gradient(135deg,#d4e8d8,#c0d8c8); display:flex; align-items:center;
+      justify-content:center; font-size:3.5rem; flex-shrink:0; }
+    .profile-info h1 { font-family:'Playfair Display',serif; font-size:1.7rem; font-weight:700; }
+    .profile-info .meta { color:var(--muted); font-size:14px; margin-top:.4rem; }
+    .profile-info .rating-row { display:flex; align-items:center; gap:10px; margin-top:.5rem; }
+    .profile-info .big-rating { font-size:1.1rem; font-weight:600; color:var(--gold); }
+    .profile-price { margin-top:.8rem; font-family:'Playfair Display',serif; font-size:1.5rem; color:var(--green); font-weight:700; }
+    .profile-price small { font-family:'DM Sans',sans-serif; font-size:14px; color:var(--muted); font-weight:400; }
+    .profile-actions { margin-top:1.1rem; display:flex; gap:10px; }
+    .profile-body { padding:2.5rem 0; }
+    .profile-layout { display:grid; grid-template-columns:1fr 320px; gap:2rem; align-items:start; }
+    .section-heading { font-family:'Playfair Display',serif; font-size:1.15rem; font-weight:600;
+      margin-bottom:.9rem; padding-bottom:.5rem; border-bottom:1px solid var(--border); }
+    .spec-list { display:flex; gap:8px; flex-wrap:wrap; }
+    .lang-list { display:flex; gap:8px; flex-wrap:wrap; margin-top:.5rem; }
+    .calendar-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; text-align:center; }
+    .cal-day-name { font-size:11px; font-weight:600; color:var(--muted); padding:4px 0; }
+    .cal-day { padding:6px; border-radius:6px; font-size:13px; cursor:pointer; transition:background .15s; border:1px solid transparent; }
+    .cal-day.available { background:#e3f2ea; color:var(--green); border-color:#a8d8b8; }
+    .cal-day.available:hover { background:var(--green); color:#fff; }
+    .cal-day.unavail { color:#ccc; }
+    .cal-day.today { border-color:var(--gold); font-weight:600; }
+    .review-item { padding:1rem 0; border-bottom:1px solid var(--border); }
+    .review-item:last-child { border-bottom:none; }
+    .review-header { display:flex; align-items:center; gap:10px; margin-bottom:.4rem; }
+    .review-avatar { width:36px; height:36px; border-radius:50%; background:#e8e4dc; display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
+    .review-name { font-weight:500; font-size:14px; }
+    .review-date { font-size:12px; color:var(--muted); }
+    .sticky-book { position:sticky; top:80px; }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="../index.html">🌿 Rwanda<span>Guide</span></a>
+  <div class="nav-links">
+    <a href="search.html">← Back to Search</a>
+    <a href="login.html">Log In</a>
+    <a href="register.html" class="btn btn-primary btn-sm">Sign Up</a>
+  </div>
+</nav>
+
+<div class="profile-hero">
+  <div class="container">
+    <div class="profile-top">
+      <div class="profile-avatar">🧑🏾</div>
+      <div class="profile-info">
+        <h1>Jean-Pierre Habimana</h1>
+        <div class="meta">📍 Volcanoes National Park &nbsp;·&nbsp; 🗣 English, Kinyarwanda, French</div>
+        <div class="rating-row">
+          <span class="big-rating">★★★★★ 5.0</span>
+          <span style="color:var(--muted);font-size:13px;">(48 reviews)</span>
+          <span class="badge badge-green">✓ Verified</span>
+          <span class="badge badge-gold">48 trips completed</span>
+        </div>
+        <div class="profile-price">$45 <small>/ hour</small></div>
+        <div class="profile-actions">
+          <a href="booking.html" class="btn btn-primary btn-lg">Book Now</a>
+          <a href="#" class="btn btn-ghost">Contact Guide</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="profile-body">
+  <div class="container">
+    <div class="profile-layout">
+
+      <!-- LEFT COLUMN -->
+      <div>
+        <!-- About -->
+        <div class="card card-body" style="margin-bottom:1.5rem;">
+          <div class="section-heading">About Jean-Pierre</div>
+          <p style="color:var(--muted);font-size:15px;line-height:1.7;">
+            Born and raised near the Virunga volcanoes, I have spent over 12 years guiding tourists through Rwanda's most spectacular wildlife experiences. I specialise in gorilla trekking, golden monkey expeditions, and volcano hikes. My deep knowledge of local ecology, culture, and conservation makes each trip both educational and unforgettable.
+          </p>
+          <div style="margin-top:1rem;">
+            <div class="section-heading" style="font-size:14px;">Specialisations</div>
+            <div class="spec-list">
+              <span class="badge badge-green">🦍 Gorilla Trekking</span>
+              <span class="badge badge-green">🐒 Golden Monkeys</span>
+              <span class="badge badge-green">🌋 Volcano Hikes</span>
+              <span class="badge badge-gold">📷 Wildlife Photography</span>
+            </div>
+          </div>
+          <div style="margin-top:1rem;">
+            <div class="section-heading" style="font-size:14px;">Languages</div>
+            <div class="lang-list">
+              <span class="badge badge-gray">English</span>
+              <span class="badge badge-gray">Kinyarwanda</span>
+              <span class="badge badge-gray">French</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Photo Gallery -->
+        <div class="card card-body" style="margin-bottom:1.5rem;">
+          <div class="section-heading">Photo Gallery</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+            <div style="height:100px;border-radius:8px;background:linear-gradient(135deg,#2d5a3d,#4a8c60);display:flex;align-items:center;justify-content:center;font-size:2rem;">🦍</div>
+            <div style="height:100px;border-radius:8px;background:linear-gradient(135deg,#3d5a2d,#608c40);display:flex;align-items:center;justify-content:center;font-size:2rem;">🌋</div>
+            <div style="height:100px;border-radius:8px;background:linear-gradient(135deg,#2d3d5a,#4060a0);display:flex;align-items:center;justify-content:center;font-size:2rem;">🐒</div>
+          </div>
+        </div>
+
+        <!-- Reviews -->
+        <div class="card card-body">
+          <div class="section-heading">Reviews (48)</div>
+          <div class="review-item">
+            <div class="review-header">
+              <div class="review-avatar">👤</div>
+              <div><div class="review-name">Sarah K. <span style="color:var(--gold);font-size:12px;">★★★★★</span></div><div class="review-date">April 2025</div></div>
+            </div>
+            <p style="font-size:14px;color:var(--muted);">Jean-Pierre was absolutely phenomenal. His knowledge of gorilla behaviour made us feel safe and the experience felt deeply authentic. Highly recommend!</p>
+          </div>
+          <div class="review-item">
+            <div class="review-header">
+              <div class="review-avatar">👤</div>
+              <div><div class="review-name">Marcus T. <span style="color:var(--gold);font-size:12px;">★★★★★</span></div><div class="review-date">March 2025</div></div>
+            </div>
+            <p style="font-size:14px;color:var(--muted);">Best guide I've ever had in 20 years of travel. He arranged everything perfectly and his storytelling about conservation was inspiring.</p>
+          </div>
+          <div style="text-align:center;margin-top:1rem;">
+            <button class="btn btn-ghost btn-sm">Load More Reviews</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN — Booking widget + Availability -->
+      <div class="sticky-book">
+        <div class="card card-body" style="margin-bottom:1.2rem;">
+          <div class="section-heading">Availability — May 2025</div>
+          <div class="calendar-grid">
+            <div class="cal-day-name">Mo</div><div class="cal-day-name">Tu</div>
+            <div class="cal-day-name">We</div><div class="cal-day-name">Th</div>
+            <div class="cal-day-name">Fr</div><div class="cal-day-name">Sa</div>
+            <div class="cal-day-name">Su</div>
+            <!-- Week rows -->
+            <div class="cal-day unavail">-</div><div class="cal-day unavail">-</div>
+            <div class="cal-day available">1</div><div class="cal-day available">2</div>
+            <div class="cal-day unavail">3</div><div class="cal-day available">4</div>
+            <div class="cal-day available">5</div>
+            <div class="cal-day available">6</div><div class="cal-day available">7</div>
+            <div class="cal-day unavail">8</div><div class="cal-day unavail">9</div>
+            <div class="cal-day available today">10</div><div class="cal-day available">11</div>
+            <div class="cal-day available">12</div>
+            <div class="cal-day available">13</div><div class="cal-day available">14</div>
+            <div class="cal-day available">15</div><div class="cal-day unavail">16</div>
+            <div class="cal-day unavail">17</div><div class="cal-day available">18</div>
+            <div class="cal-day available">19</div>
+            <div class="cal-day unavail">20</div><div class="cal-day available">21</div>
+            <div class="cal-day available">22</div><div class="cal-day available">23</div>
+            <div class="cal-day available">24</div><div class="cal-day available">25</div>
+            <div class="cal-day unavail">26</div>
+          </div>
+          <div style="margin-top:.8rem;font-size:12px;color:var(--muted);display:flex;gap:12px;">
+            <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#e3f2ea;border:1px solid #a8d8b8;"></span> Available</span>
+            <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#f0eeea;"></span> Unavailable</span>
+          </div>
+        </div>
+
+        <a href="booking.html" class="btn btn-primary" style="width:100%;font-size:15px;padding:13px;">
+          Book Jean-Pierre →
+        </a>
+        <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:.6rem;">
+          Free cancellation up to 48h before. Secure payment via MTN MoMo.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<footer><div class="container"><div class="footer-inner">
+  <div class="brand">🌿 RwandaGuide</div>
+  <div>© 2025 Rwanda Tourist Experience Platform</div>
+</div></div></footer>
+</body>
+</html>
