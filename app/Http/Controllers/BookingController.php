@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\Experience;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class BookingController extends Controller
 {
@@ -16,7 +16,6 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        $experience = Experience::findOrFail($request->experience_id);
 
         $validated = $request->validate([
             'experience_id' => 'required|exists:experiences,id',
@@ -24,6 +23,7 @@ class BookingController extends Controller
             'number_of_people' => 'required|integer|min:1',
         ]);
 
+        $experience = Experience::findOrFail($validated['experience_id']);
         $totalPrice = $experience->price * $validated['number_of_people'];
 
         $booking = Booking::create([
@@ -44,10 +44,12 @@ class BookingController extends Controller
      */
     public function payment($id)
     {
-        $booking = Booking::with('experience')->findOrFail($id);
-        
+        $booking = Booking::with('experience')
+            ->where('user_id', Auth::id())
+            ->findOrFail($id);
+
         return Inertia::render('bookings/payment', [
-            'booking' => $booking
+            'booking' => $booking,
         ]);
     }
 
@@ -56,11 +58,15 @@ class BookingController extends Controller
      */
     public function confirm($id)
     {
-        $booking = Booking::findOrFail($id);
+        $booking = Booking::query()
+            ->where('user_id', Auth::id())
+            ->where('payment_status', 'pending')
+            ->findOrFail($id);
+
         $booking->update([
             'payment_status' => 'paid',
             'payment_method' => 'MoMo',
-            'transaction_id' => 'RW_' . uniqid()
+            'transaction_id' => 'RW_'.uniqid(),
         ]);
 
         return redirect()->route('dashboard')->with('status', 'Payment successful! Your adventure is confirmed.');

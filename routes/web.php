@@ -8,25 +8,12 @@ use App\Http\Controllers\DiscoveryController;
 use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\ReviewController;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
 Route::get('explore', [DiscoveryController::class, 'index'])
     ->middleware('throttle:app-public')
     ->name('explore');
-
-// TEMP: Debug Route to run the new Reviews migration
-Route::get('debug/migrate', function () {
-    try {
-        Artisan::call('optimize:clear');
-        Artisan::call('migrate', ['--force' => true]);
-
-        return "System refreshed and database updated! <a href='/explore'>Go back to Explore</a>";
-    } catch (Exception $e) {
-        return 'Action failed: '.$e->getMessage();
-    }
-})->middleware('throttle:1,10');
 
 Route::get('/', [DiscoveryController::class, 'index'])
     ->middleware('throttle:app-public')
@@ -41,7 +28,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Admin Routes
-    Route::get('admin', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('admin', [AdminController::class, 'index'])
+        ->middleware('admin')
+        ->name('admin.dashboard');
 
     // Booking Flow
     Route::post('bookings', [BookingController::class, 'store'])

@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Experience;
 use App\Models\Guide;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class ExperienceController extends Controller
 {
@@ -16,9 +16,16 @@ class ExperienceController extends Controller
     public function create()
     {
         $user = Auth::user();
-        
+
         if ($user->role !== 'guide') {
             return redirect()->route('dashboard');
+        }
+
+        $guide = Guide::where('user_id', $user->id)->first();
+
+        if (! $guide?->is_verified) {
+            return redirect()->route('guide.profile.edit')
+                ->with('error', 'Your guide profile must be verified before you can create experiences.');
         }
 
         return Inertia::render('experiences/create');
@@ -32,7 +39,7 @@ class ExperienceController extends Controller
         $experience = Experience::with(['guide.user', 'reviews.user'])->findOrFail($id);
 
         return Inertia::render('experiences/show', [
-            'experience' => $experience
+            'experience' => $experience,
         ]);
     }
 
@@ -44,8 +51,17 @@ class ExperienceController extends Controller
         $user = Auth::user();
         $guide = Guide::where('user_id', $user->id)->first();
 
-        if (!$guide) {
+        if ($user->role !== 'guide') {
+            abort(403);
+        }
+
+        if (! $guide) {
             return redirect()->route('guide.profile.edit')->with('error', 'Please complete your guide profile first.');
+        }
+
+        if (! $guide->is_verified) {
+            return redirect()->route('guide.profile.edit')
+                ->with('error', 'Your guide profile must be verified before you can create experiences.');
         }
 
         $validated = $request->validate([

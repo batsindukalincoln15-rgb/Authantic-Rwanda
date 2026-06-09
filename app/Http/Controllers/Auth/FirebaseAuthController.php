@@ -9,7 +9,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 
 class FirebaseAuthController extends Controller
 {
@@ -17,7 +16,6 @@ class FirebaseAuthController extends Controller
     {
         $validated = $request->validate([
             'id_token' => ['required', 'string'],
-            'role' => ['nullable', Rule::in(['tourist', 'guide'])],
             'phone_number' => ['nullable', 'string', 'max:30'],
         ]);
 
@@ -42,7 +40,7 @@ class FirebaseAuthController extends Controller
                 'email' => $email,
                 'email_verified_at' => ($payload['email_verified'] ?? false) ? now() : null,
                 'password' => Str::password(40),
-                'role' => $validated['role'] ?? 'tourist',
+                'role' => 'tourist',
                 'phone_number' => $validated['phone_number'] ?? null,
             ]);
         } else {
@@ -60,7 +58,7 @@ class FirebaseAuthController extends Controller
     }
 
     /**
-     * @param array<string, mixed> $payload
+     * @param  array<string, mixed>  $payload
      */
     private function displayName(array $payload, string $email): string
     {
