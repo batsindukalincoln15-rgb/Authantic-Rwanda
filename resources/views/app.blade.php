@@ -39,13 +39,13 @@
         @viteReactRefresh
         @vite(['resources/css/app.css', 'resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
         <x-inertia::head>
-            <title inertia>{{ config('app.name', 'Authentic Rwanda') }}</title>
-            <meta name="description" content="Discover and book authentic Rwandan experiences led by verified local guides. Explore culture, nature, and community-driven tours in the Land of a Thousand Hills.">
+            <title inertia>{{ config('app.name', "Keza's E Shopping") }}</title>
+            <meta name="description" content="Keza's E Shopping — Your trusted online shopping destination. Discover quality products and shop with confidence.">
             
             <!-- Open Graph / Facebook -->
             <meta property="og:type" content="website">
-            <meta property="og:title" content="Authentic Rwanda - Local Guided Experiences">
-            <meta property="og:description" content="Book unique tours and community experiences in Rwanda. Support local guides and discover the heart of Africa.">
+            <meta property="og:title" content="Keza's E Shopping">
+            <meta property="og:description" content="Keza's E Shopping — Your trusted online shopping destination. Discover quality products and shop with confidence.">
             <meta property="og:image" content="https://images.unsplash.com/photo-1542332213-9b5a5a3fab35?q=80&w=1200&auto=format&fit=crop">
         </x-inertia::head>
 

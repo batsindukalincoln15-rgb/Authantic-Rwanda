@@ -20,6 +20,7 @@ class DashboardController extends Controller
         $isGuide = $user->role === 'guide';
         
         $bookings = [];
+        $guideExperiences = [];
 
         if ($isGuide) {
             // Find the guide profile
@@ -30,6 +31,9 @@ class DashboardController extends Controller
                 $bookings = Booking::whereIn('experience_id', function($query) use ($guide) {
                     $query->select('id')->from('experiences')->where('guide_id', $guide->id);
                 })->with(['experience', 'user'])->latest()->limit(5)->get();
+
+                // Get the guide's experiences
+                $guideExperiences = Experience::where('guide_id', $guide->id)->latest()->get();
             }
         } else {
             // Get bookings made by this tourist
@@ -42,7 +46,22 @@ class DashboardController extends Controller
 
         return Inertia::render('dashboard', [
             'bookings' => $bookings,
-            'isGuide' => $isGuide
+            'isGuide' => $isGuide,
+            'guideExperiences' => $guideExperiences,
         ]);
+    }
+
+    /**
+     * Upgrade the current user to a guide.
+     */
+    public function becomeGuide(Request $request)
+    {
+        $user = Auth::user();
+        
+        if ($user && $user->role !== 'guide') {
+            $user->update(['role' => 'guide']);
+        }
+
+        return redirect()->route('dashboard');
     }
 }

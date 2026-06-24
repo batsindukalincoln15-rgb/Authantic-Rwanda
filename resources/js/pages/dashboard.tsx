@@ -44,11 +44,6 @@ export default function Dashboard({ bookings, isGuide }: Props) {
                     <div className="relative z-10 flex flex-col gap-2">
                         <div className="flex items-center justify-between">
                             <h1 className="text-4xl font-extrabold tracking-tight">Mwaramutse, {user.name.split(' ')[0]}!</h1>
-                            <Link href="/admin">
-                                <Badge className="bg-white/20 text-white hover:bg-white/40 border-none cursor-pointer">
-                                    Platform Admin →
-                                </Badge>
-                            </Link>
                         </div>
                         <p className="text-zinc-300 text-lg max-w-xl">
                             {isGuide 
@@ -101,24 +96,45 @@ export default function Dashboard({ bookings, isGuide }: Props) {
                             </Card>
                         </>
                     ) : (
-                        <Card className="border-t-4 border-[#d93838] shadow-md hover:shadow-lg transition-shadow">
-                            <CardHeader className="pb-3">
-                                <CardTitle className="flex items-center gap-2">
-                                    <Search className="size-5 text-[#d93838]" />
-                                    Find Your Next Adventure
-                                </CardTitle>
-                                <CardDescription>
-                                    Discover unique tours led by our verified local guides.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <Link href="/explore">
-                                    <Button className="w-full bg-[#d93838] hover:bg-[#b02e2e]">
-                                        Browse Experiences
-                                    </Button>
-                                </Link>
-                            </CardContent>
-                        </Card>
+                        <>
+                            <Card className="border-t-4 border-[#d93838] shadow-md hover:shadow-lg transition-shadow">
+                                <CardHeader className="pb-3">
+                                    <CardTitle className="flex items-center gap-2">
+                                        <Search className="size-5 text-[#d93838]" />
+                                        Find Your Next Adventure
+                                    </CardTitle>
+                                    <CardDescription>
+                                        Discover unique tours led by our verified local guides.
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <Link href="/explore">
+                                        <Button className="w-full bg-[#d93838] hover:bg-[#b02e2e]">
+                                            Browse Experiences
+                                        </Button>
+                                    </Link>
+                                </CardContent>
+                            </Card>
+
+                            <Card className="shadow-sm">
+                                <CardHeader className="pb-3">
+                                    <CardTitle className="flex items-center gap-2">
+                                        <MapPin className="size-5 text-zinc-500" />
+                                        Become a Local Guide
+                                    </CardTitle>
+                                    <CardDescription>
+                                        Share your local knowledge and start hosting your own experiences.
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <Link href="/profile/become-guide" method="post" as="button" className="w-full">
+                                        <Button variant="outline" className="w-full border-zinc-300">
+                                            Become a Guide
+                                        </Button>
+                                    </Link>
+                                </CardContent>
+                            </Card>
+                        </>
                     )}
 
                     <Card className="shadow-sm">

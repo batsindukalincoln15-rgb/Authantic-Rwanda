@@ -22,9 +22,9 @@ export default function AuthSplitLayout({
                 
                 <div className="relative z-20 flex items-center text-2xl font-bold tracking-tight">
                     <div className="mr-3 flex h-10 w-10 items-center justify-center rounded-xl bg-[#d93838] text-white">
-                        RW
+                        KE
                     </div>
-                    <span>Authentic Rwanda</span>
+                    <span>Keza's E Shopping</span>
                 </div>
 
                 <div className="relative z-20 mt-auto">

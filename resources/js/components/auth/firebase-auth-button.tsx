@@ -16,6 +16,11 @@ export function FirebaseAuthButton({ role }: FirebaseAuthButtonProps) {
     const [error, setError] = useState<string | null>(null);
 
     const signIn = async () => {
+        if (window.location.hostname === '127.0.0.1') {
+            window.location.assign(window.location.href.replace('127.0.0.1', 'localhost'));
+            return;
+        }
+
         if (!firebaseAuth || !isFirebaseConfigured()) {
             setError('Firebase is not configured yet.');
             return;

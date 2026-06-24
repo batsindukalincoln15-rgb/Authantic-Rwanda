@@ -58,17 +58,12 @@ class BookingController extends Controller
      */
     public function confirm($id)
     {
-        $booking = Booking::query()
+        Booking::query()
             ->where('user_id', Auth::id())
-            ->where('payment_status', 'pending')
             ->findOrFail($id);
 
-        $booking->update([
-            'payment_status' => 'paid',
-            'payment_method' => 'MoMo',
-            'transaction_id' => 'RW_'.uniqid(),
-        ]);
-
-        return redirect()->route('dashboard')->with('status', 'Payment successful! Your adventure is confirmed.');
+        return redirect()
+            ->route('bookings.payment', ['id' => $id])
+            ->withErrors(['payment' => 'Please complete payment through Stripe Checkout.']);
     }
 }

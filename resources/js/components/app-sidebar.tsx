@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { HelpCircle, LayoutGrid, MapPin, Search } from 'lucide-react';
+import { HelpCircle, LayoutGrid, MapPin, Search, PlusCircle } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -24,13 +24,13 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'My Experiences',
-        href: '#',
+        href: '/experiences',
         icon: MapPin,
     },
     {
-        title: 'Bookings',
-        href: '#',
-        icon: Search,
+        title: 'New Experience',
+        href: '/experiences/create',
+        icon: PlusCircle,
     },
 ];
 

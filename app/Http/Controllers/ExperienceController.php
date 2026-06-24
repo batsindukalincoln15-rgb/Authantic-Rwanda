@@ -11,6 +11,29 @@ use Inertia\Inertia;
 class ExperienceController extends Controller
 {
     /**
+     * Display a listing of the guide's own experiences.
+     */
+    public function index()
+    {
+        $user = Auth::user();
+
+        if ($user->role !== 'guide') {
+            return redirect()->route('dashboard');
+        }
+
+        $guide = Guide::where('user_id', $user->id)->first();
+
+        $experiences = $guide
+            ? Experience::where('guide_id', $guide->id)->latest()->get()
+            : collect([]);
+
+        return Inertia::render('experiences/index', [
+            'experiences' => $experiences,
+            'guide' => $guide,
+        ]);
+    }
+
+    /**
      * Show the form for creating a new experience.
      */
     public function create()
@@ -21,12 +44,17 @@ class ExperienceController extends Controller
             return redirect()->route('dashboard');
         }
 
-        $guide = Guide::where('user_id', $user->id)->first();
-
-        if (! $guide?->is_verified) {
-            return redirect()->route('guide.profile.edit')
-                ->with('error', 'Your guide profile must be verified before you can create experiences.');
-        }
+        // Auto-create a guide profile if it doesn't exist yet
+        $guide = Guide::firstOrCreate(
+            ['user_id' => $user->id],
+            [
+                'bio' => null,
+                'specialties' => [],
+                'languages' => [],
+                'is_verified' => false,
+                'national_id' => 'PENDING_'.$user->id,
+            ]
+        );
 
         return Inertia::render('experiences/create');
     }
@@ -49,20 +77,22 @@ class ExperienceController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        $guide = Guide::where('user_id', $user->id)->first();
 
         if ($user->role !== 'guide') {
             abort(403);
         }
 
-        if (! $guide) {
-            return redirect()->route('guide.profile.edit')->with('error', 'Please complete your guide profile first.');
-        }
-
-        if (! $guide->is_verified) {
-            return redirect()->route('guide.profile.edit')
-                ->with('error', 'Your guide profile must be verified before you can create experiences.');
-        }
+        // Auto-create a guide profile if it doesn't exist yet
+        $guide = Guide::firstOrCreate(
+            ['user_id' => $user->id],
+            [
+                'bio' => null,
+                'specialties' => [],
+                'languages' => [],
+                'is_verified' => false,
+                'national_id' => 'PENDING_'.$user->id,
+            ]
+        );
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -84,6 +114,95 @@ class ExperienceController extends Controller
             'is_active' => true,
         ]);
 
-        return redirect()->route('dashboard')->with('status', 'Experience created successfully!');
+        return redirect()->route('experiences.index')->with('status', 'Experience created successfully!');
+    }
+
+    /**
+     * Show the form for editing the specified experience.
+     */
+    public function edit($id)
+    {
+        $user = Auth::user();
+
+        if ($user->role !== 'guide') {
+            return redirect()->route('dashboard');
+        }
+
+        $guide = Guide::where('user_id', $user->id)->first();
+
+        if (! $guide) {
+            return redirect()->route('experiences.index');
+        }
+
+        $experience = Experience::where('guide_id', $guide->id)->findOrFail($id);
+
+        return Inertia::render('experiences/edit', [
+            'experience' => $experience,
+        ]);
+    }
+
+    /**
+     * Update the specified experience in storage.
+     */
+    public function update(Request $request, $id)
+    {
+        $user = Auth::user();
+
+        if ($user->role !== 'guide') {
+            abort(403);
+        }
+
+        $guide = Guide::where('user_id', $user->id)->first();
+
+        if (! $guide) {
+            abort(403);
+        }
+
+        $experience = Experience::where('guide_id', $guide->id)->findOrFail($id);
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'location_name' => 'required|string|max:255',
+            'duration' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'category' => 'nullable|string|max:255',
+            'is_active' => 'boolean',
+        ]);
+
+        $experience->update([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'location_name' => $validated['location_name'],
+            'duration' => $validated['duration'],
+            'price' => $validated['price'],
+            'category' => $validated['category'] ?? 'General',
+            'is_active' => $validated['is_active'] ?? $experience->is_active,
+        ]);
+
+        return redirect()->route('experiences.index')->with('status', 'Experience updated successfully!');
+    }
+
+    /**
+     * Remove the specified experience from storage.
+     */
+    public function destroy($id)
+    {
+        $user = Auth::user();
+
+        if ($user->role !== 'guide') {
+            abort(403);
+        }
+
+        $guide = Guide::where('user_id', $user->id)->first();
+
+        if (! $guide) {
+            abort(403);
+        }
+
+        $experience = Experience::where('guide_id', $guide->id)->findOrFail($id);
+        $experience->delete();
+
+        return redirect()->route('experiences.index')->with('status', 'Experience deleted successfully.');
     }
 }

@@ -17,7 +17,14 @@ class Booking extends Model
         'total_price',
         'payment_status',
         'payment_method',
-        'transaction_id'
+        'transaction_id',
+        'stripe_checkout_session_id',
+        'stripe_payment_intent_id',
+        'paid_at',
+    ];
+
+    protected $casts = [
+        'paid_at' => 'datetime',
     ];
 
     /**

@@ -48,14 +48,16 @@ class GuideController extends Controller
         $specialties = $this->parseCsvList($validated['specialties'] ?? null);
         $languages = $this->parseCsvList($validated['languages'] ?? null);
 
+        $existingGuide = Guide::where('user_id', $user->id)->first();
+
         $guide = Guide::updateOrCreate(
             ['user_id' => $user->id],
             [
                 'bio' => $validated['bio'] ?? null,
                 'specialties' => $specialties,
                 'languages' => $languages,
-                'is_verified' => false,
-                'national_id' => 'PENDING_'.$user->id, // Add dummy ID to satisfy DB constraint
+                'is_verified' => $existingGuide?->is_verified ?? false,
+                'national_id' => $existingGuide?->national_id ?? 'PENDING_'.$user->id,
             ]
         );
 
